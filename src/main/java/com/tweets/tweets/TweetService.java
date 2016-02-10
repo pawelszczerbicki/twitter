@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
+import static java.time.format.DateTimeFormatter.ISO_DATE;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
@@ -104,5 +105,16 @@ public class TweetService {
                 .setReplies(s.stream().mapToInt(TwitterResult::getReplies).sum())
                 .setRetweets(s.stream().mapToInt(TwitterResult::getRetweets).sum())
                 .setTweets(s.size());
+    }
+
+    public String asStringCsv() {
+        StringBuilder b = new StringBuilder("date;likes;replies;retweets\n");
+        results.forEach(r-> b.append(r.getDate().format(ISO_DATE)).append(";")
+                .append(r.getLikes()).append(";")
+                .append(r.getReplies()).append(";")
+                .append(r.getRetweets())
+                .append("\n"));
+        return b.toString();
+
     }
 }
